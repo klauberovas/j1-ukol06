@@ -17,26 +17,28 @@ public class SvatkySluzba {
     private final Path cestaKDatum = Path.of("data/svatky.json");
     private final SeznamSvatku seznamSvatku;
 
+    /**
+     * Načte seznam svátků ze souboru svatky.json
+     * @throws IOException
+     */
     public SvatkySluzba() throws IOException {
-        // TODO načíst seznam svátků ze souboru svatky.json
-
-        // Následující řádek po vlastní implementaci smažete.
-        seznamSvatku = null;
+        seznamSvatku = objectMapper.readValue(cestaKDatum.toFile(), SeznamSvatku.class);
     }
 
     public List<String> vyhledatSvatkyDnes() {
         return vyhledatSvatkyKeDni(MonthDay.now());
     }
 
+    /**
+     * @param day
+     * @return vyhledá svátky k danému dni
+     *
+     */
     public List<String> vyhledatSvatkyKeDni(MonthDay day) {
-        // TODO
-        // získat seznam svátků
-        // převést na Stream
-        // pomocí metody filter() vybrat jen ty, které odpovídají zadanému dni (porovnat MonthDay pomocí metodyequals())
-        // pomocí metody map() získat z objektu jméno
-        // pomocí toList() převést na List
-
-        // Následující řádek po vlastní implementaci smažete.
-        return List.of();
+        return seznamSvatku.getSvatky()
+                .stream()
+                .filter(svatek -> svatek.getDen().equals(day))
+                .map(Svatek::getJmeno)
+                .toList();
     }
 }
